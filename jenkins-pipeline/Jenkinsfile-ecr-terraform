@@ -56,7 +56,13 @@ pipeline {
                                 if (params.'Terraform-Action' == 'apply') {
                                     sh "terraform apply -auto-approve -var-file=${params.'File-Name'}"
                                 } else if (params.'Terraform-Action' == 'destroy') {
+                                    
+                                    sh "aws ecr list-images --repository-name diners-ecr-repo"
+
+                                     sh "aws ecr delete-repository --repository-name diners-ecr-repo --force"
+
                                     sh "terraform destroy -auto-approve -var-file=${params.'File-Name'}"
+
                                 } else {
                                     error "Invalid value for Terraform-Action: ${params.'Terraform-Action'}"
                                 }
